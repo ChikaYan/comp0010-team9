@@ -1,10 +1,9 @@
 package com.trafficmon;
 
 import org.junit.Test;
-//import org.junit.Assert.assertTrue; //???
+import static org.junit.Assert.*; // NEED STATIC!!
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-
 
 public class VehicleTest {
     @Test
@@ -22,15 +21,15 @@ public class VehicleTest {
         Vehicle v1 = Vehicle.withRegistration("A123 XYZ");
         Vehicle v2 = v1;
         //assertTrue(v1.equals(v2),is(true));
-        assertThat(v1.equals(v2), is(true));
+        assertTrue(v1.equals(v2));
         v2 = Vehicle.withRegistration("A123 XYZ");
-        assertThat(v1.equals(v2), is(true));
+        assertTrue(v1.equals(v2));
 
         v2 = Vehicle.withRegistration("A123 XZZ");
-        assertThat(v1.equals(v2), is(false));
+        assertFalse(v1.equals(v2));
         v2 = null;
-        assertThat(v1.equals(v2), is(false));
-        assertThat(v1.equals("A123 XYZ"), is(false));
+        assertFalse(v1.equals(v2));
+        assertFalse(v1.equals("A123 XYZ"));
 
     }
 
