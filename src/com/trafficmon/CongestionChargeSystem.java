@@ -23,7 +23,8 @@ public class CongestionChargeSystem {
     // modified to make operation team a parameter
     // that way method can be tested through unit test
     // and different operation team can be used for charging
-    public void calculateCharges(PenaltiesService operationTeam) {
+    // same for registered customer accounts service
+    public void calculateCharges(PenaltiesService operationTeam, AccountsService accountsService) {
 
         Map<Vehicle, List<ZoneBoundaryCrossing>> crossingsByVehicle = new HashMap<Vehicle, List<ZoneBoundaryCrossing>>();
 
@@ -45,7 +46,7 @@ public class CongestionChargeSystem {
                 BigDecimal charge = calculateChargeForTimeInZone(crossings);
 
                 try {
-                    RegisteredCustomerAccountsService.getInstance().accountFor(vehicle).deduct(charge);
+                    accountsService.accountFor(vehicle).deduct(charge);
                 } catch (InsufficientCreditException ice) {
                     operationTeam.issuePenaltyNotice(vehicle, charge);
                 } catch (AccountNotRegisteredException e) {
