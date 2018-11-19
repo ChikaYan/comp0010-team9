@@ -20,7 +20,10 @@ public class CongestionChargeSystem {
         eventLog.add(new ExitEvent(vehicle));
     }
 
-    public void calculateCharges() {
+    // modified to make operation team a parameter
+    // that way method can be tested through unit test
+    // and different operation team can be used for charging
+    public void calculateCharges(PenaltiesService operationTeam) {
 
         Map<Vehicle, List<ZoneBoundaryCrossing>> crossingsByVehicle = new HashMap<Vehicle, List<ZoneBoundaryCrossing>>();
 
@@ -36,7 +39,7 @@ public class CongestionChargeSystem {
             List<ZoneBoundaryCrossing> crossings = vehicleCrossings.getValue();
 
             if (!checkOrderingOf(crossings)) {
-                OperationsTeam.getInstance().triggerInvestigationInto(vehicle);
+                operationTeam.triggerInvestigationInto(vehicle);
             } else {
 
                 BigDecimal charge = calculateChargeForTimeInZone(crossings);
@@ -44,9 +47,9 @@ public class CongestionChargeSystem {
                 try {
                     RegisteredCustomerAccountsService.getInstance().accountFor(vehicle).deduct(charge);
                 } catch (InsufficientCreditException ice) {
-                    OperationsTeam.getInstance().issuePenaltyNotice(vehicle, charge);
+                    operationTeam.issuePenaltyNotice(vehicle, charge);
                 } catch (AccountNotRegisteredException e) {
-                    OperationsTeam.getInstance().issuePenaltyNotice(vehicle, charge);
+                    operationTeam.issuePenaltyNotice(vehicle, charge);
                 }
             }
         }
