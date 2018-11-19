@@ -10,9 +10,7 @@ public abstract class ZoneBoundaryCrossing {
         this.time = System.currentTimeMillis();
     }
 
-    public Vehicle getVehicle() {
-        return vehicle;
-    }
+    public Vehicle getVehicle() {  return vehicle; }
 
     public long timestamp() {
         return time;
