@@ -7,7 +7,7 @@ public abstract class ZoneBoundaryCrossing {
     private LocalTime time;
 
     // change to use time wrapper
-    public ZoneBoundaryCrossing(Vehicle vehicle, TimeWrapper time) {
+    public ZoneBoundaryCrossing(Vehicle vehicle, TimeGetter time) {
         this.vehicle = vehicle;
         this.time = time.getCurrentTime();
     }

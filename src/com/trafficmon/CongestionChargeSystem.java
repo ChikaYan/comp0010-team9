@@ -10,14 +10,14 @@ public class CongestionChargeSystem {
     private final List<ZoneBoundaryCrossing> eventLog = new ArrayList<ZoneBoundaryCrossing>();
 
     public void vehicleEnteringZone(Vehicle vehicle) {
-        eventLog.add(new EntryEvent(vehicle));
+        eventLog.add(new EntryEvent(vehicle, new TimeWrapper()));
     }
 
     public void vehicleLeavingZone(Vehicle vehicle) {
         if (!previouslyRegistered(vehicle)) {
             return;
         }
-        eventLog.add(new ExitEvent(vehicle));
+        eventLog.add(new ExitEvent(vehicle, new TimeWrapper()));
     }
 
     // modified to make operation team a parameter

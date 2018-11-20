@@ -1,7 +1,7 @@
 package com.trafficmon;
 
 public class ExitEvent extends ZoneBoundaryCrossing {
-    public ExitEvent(Vehicle vehicle) {
-        super(vehicle, new TimeWrapper());
+    public ExitEvent(Vehicle vehicle,TimeGetter timeWrapper) {
+        super(vehicle, timeWrapper);
     }
 }
