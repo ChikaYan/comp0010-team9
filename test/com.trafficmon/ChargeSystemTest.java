@@ -27,6 +27,10 @@ public class ChargeSystemTest {
     public void checkVehicleLeavingZone(){
 
     }
+    @Test
+    public void checkVehicleLeavingZone (){
+
+    }
 //    public void checkMinutesBetween(){
 //        CongestionChargeSystem ccs = new CongestionChargeSystem();
 //        assertEquals(ccs.minutesBetween(), 1L);
