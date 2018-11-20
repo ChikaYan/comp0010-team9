@@ -1,14 +1,19 @@
 package com.trafficmon;
 
+import org.jmock.Expectations;
 import org.jmock.integration.junit4.JUnitRuleMockery;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+
+import java.time.LocalTime;
 
 import static org.junit.Assert.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
 public class ZoneBoundaryCrossingTest {
+    private static final LocalTime LOCALTIME = LocalTime.NOON;
     @Rule
     public JUnitRuleMockery context = new JUnitRuleMockery();
 
@@ -16,12 +21,23 @@ public class ZoneBoundaryCrossingTest {
 
     private Vehicle vehicle = Vehicle.withRegistration("A123 XYZ");
 
+    private EntryEvent mockEntry;
+    private EntryEvent mockExit;
+
+    @Before
+    public void setUpMockEvents(){
+        context.checking(new Expectations() {{
+            exactly(2).of(timeGetter).getCurrentTime();
+            will(returnValue(LOCALTIME));
+        }});
+        mockEntry = new EntryEvent(vehicle, timeGetter);
+        mockExit = new EntryEvent(vehicle, timeGetter);
+    }
+
     @Test
     public void canPassAndGetVehicle() {
-        EntryEvent entry = new EntryEvent(vehicle, timeGetter);
-        ExitEvent exit = new ExitEvent(vehicle, timeGetter);
-        assertSame(entry.getVehicle(), vehicle);
-        assertSame(exit.getVehicle(), vehicle);
+        assertSame(mockEntry.getVehicle(), vehicle);
+        assertSame(mockExit.getVehicle(), vehicle);
     }
 
     // old test for timestamp()
@@ -43,7 +59,10 @@ public class ZoneBoundaryCrossingTest {
 
     @Test
     public void canGetTimeUsingWrapper() {
-
+        context.checking(new Expectations() {{
+        }});
+        assertEquals(mockEntry.getTime(),LOCALTIME);
+        assertEquals(mockExit.getTime(),LOCALTIME);
     }
 
 }
