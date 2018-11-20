@@ -26,7 +26,7 @@ public class ZoneBoundaryCrossingTest {
 
     // old test for timestamp()
     @Test
-    public void canRecordTimeStamp() throws InterruptedException { //TODO: does this work?
+    public void canRecordTimeStamp() throws InterruptedException {
         TimeGetter timeWrapper = new TimeWrapper();
         EntryEvent entry1 = new EntryEvent(vehicle, timeWrapper);
         Thread.sleep(1000);
