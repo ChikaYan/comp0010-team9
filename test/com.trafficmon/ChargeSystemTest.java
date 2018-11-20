@@ -19,7 +19,7 @@ public class ChargeSystemTest {
     public void checkVehicleEnteringZone(){
         CongestionChargeSystem ccs = new CongestionChargeSystem();
         Vehicle vehicle = Vehicle.withRegistration("A123 XYZ");
-        ccs.vehicleEnteringZone(Vehicle vehicle);
+        //ccs.vehicleEnteringZone(Vehicle vehicle);
 
     }
 
