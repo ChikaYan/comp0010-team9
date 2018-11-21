@@ -34,5 +34,10 @@ public class VehicleTest {
     }
 
     //TODO: need to test hashcode?
-
+    @Test
+    public void CheckHashCode(){
+        Vehicle vehicle1 = Vehicle.withRegistration("A123 XYZ");
+        Vehicle vehicle2 = Vehicle.withRegistration("A123 XYZ");
+        assertEquals(vehicle1.hashCode(),vehicle2.hashCode());
+    } //different objects probably have the same hashCode
 }
