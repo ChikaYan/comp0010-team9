@@ -10,7 +10,7 @@ public class Test {
         ccs.vehicleEnteringZone(Vehicle.withRegistration("A123 XYZ"));
         delaySeconds(3);
         ccs.vehicleLeavingZone(Vehicle.withRegistration("A123 XYZ"));
-        ccs.calculateCharges(OperationsTeam.getInstance(), RegisteredCustomerAccountsService.getInstance());
+        ccs.calculateCharges();
     }
 
     private static void delayMins(int mins) throws InterruptedException {
