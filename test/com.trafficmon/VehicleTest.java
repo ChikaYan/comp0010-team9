@@ -33,7 +33,6 @@ public class VehicleTest {
 
     }
 
-    //TODO: need to test hashcode?
     @Test
     public void CheckHashCode(){
         Vehicle vehicle1 = Vehicle.withRegistration("A123 XYZ");
