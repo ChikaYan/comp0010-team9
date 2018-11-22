@@ -10,14 +10,14 @@ public class CongestionChargeSystem {
     private final List<ZoneBoundaryCrossing> eventLog = new ArrayList<ZoneBoundaryCrossing>();
 
     public void vehicleEnteringZone(Vehicle vehicle) {
-        eventLog.add(new EntryEvent(vehicle, new SystemClock()));
+        eventLog.add(new ZoneBoundaryCrossing(vehicle, new SystemClock(),EventType.ENTRY));
     }
 
     public void vehicleLeavingZone(Vehicle vehicle) {
         if (!previouslyRegistered(vehicle)) {
             return;
         }
-        eventLog.add(new ExitEvent(vehicle, new SystemClock()));
+        eventLog.add(new ZoneBoundaryCrossing(vehicle, new SystemClock(),EventType.EXIT));
     }
 
     // modified to make operation team a parameter
@@ -65,7 +65,7 @@ public class CongestionChargeSystem {
 
         for (ZoneBoundaryCrossing crossing : crossings.subList(1, crossings.size())) {
 
-            if (crossing instanceof ExitEvent) {
+            if (crossing.type == EventType.EXIT) {
                 charge = charge.add(
                         new BigDecimal(minutesBetween(lastEvent.timestamp(), crossing.timestamp()))
                                 .multiply(CHARGE_RATE_POUNDS_PER_MINUTE));
@@ -94,10 +94,10 @@ public class CongestionChargeSystem {
             if (crossing.timestamp() < lastEvent.timestamp()) {
                 return false;
             }
-            if (crossing instanceof EntryEvent && lastEvent instanceof EntryEvent) {
+            if (crossing.type == EventType.ENTRY && lastEvent.type == EventType.ENTRY) {
                 return false;
             }
-            if (crossing instanceof ExitEvent && lastEvent instanceof ExitEvent) {
+            if (crossing.type == EventType.EXIT && lastEvent.type == EventType.EXIT) {
                 return false;
             }
             lastEvent = crossing;

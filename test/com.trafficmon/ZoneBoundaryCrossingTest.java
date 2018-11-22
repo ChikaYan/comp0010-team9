@@ -21,17 +21,17 @@ public class ZoneBoundaryCrossingTest {
 
     private Vehicle vehicle = Vehicle.withRegistration("A123 XYZ");
 
-    private EntryEvent mockEntry;
-    private EntryEvent mockExit;
+    private ZoneBoundaryCrossing mockEntry;
+    private ZoneBoundaryCrossing mockExit;
 
     @Before
-    public void setUpMockEvents(){
+    public void setUpMockEvents() {
         context.checking(new Expectations() {{
             exactly(2).of(clock).getCurrentTime();
             will(returnValue(LOCALTIME));
         }});
-        mockEntry = new EntryEvent(vehicle, clock);
-        mockExit = new EntryEvent(vehicle, clock);
+        mockEntry = new ZoneBoundaryCrossing(vehicle, clock, EventType.ENTRY);
+        mockExit = new ZoneBoundaryCrossing(vehicle, clock, EventType.EXIT);
     }
 
     @Test
@@ -40,17 +40,17 @@ public class ZoneBoundaryCrossingTest {
         assertSame(mockExit.getVehicle(), vehicle);
     }
 
-    // old test for timestamp()
+//     old test for timestamp()
     @Test
     public void canRecordTimeStamp() throws InterruptedException {
         Clock timeWrapper = new SystemClock();
-        EntryEvent entry1 = new EntryEvent(vehicle, timeWrapper);
+        ZoneBoundaryCrossing entry1 = new ZoneBoundaryCrossing(vehicle, timeWrapper,EventType.ENTRY);
         Thread.sleep(1000);
-        EntryEvent entry2 = new EntryEvent(vehicle, timeWrapper);
+        ZoneBoundaryCrossing entry2 = new ZoneBoundaryCrossing(vehicle, timeWrapper,EventType.EXIT);
         Thread.sleep(1000);
-        ExitEvent exit1 = new ExitEvent(vehicle, timeWrapper);
+        ZoneBoundaryCrossing exit1 = new ZoneBoundaryCrossing(vehicle, timeWrapper,EventType.EXIT);
         Thread.sleep(1000);
-        ExitEvent exit2 = new ExitEvent(vehicle, timeWrapper);
+        ZoneBoundaryCrossing exit2 = new ZoneBoundaryCrossing(vehicle, timeWrapper,EventType.EXIT);
 
         assertTrue(entry1.timestamp() < entry2.timestamp());
         assertTrue(entry2.timestamp() < exit1.timestamp());
@@ -61,8 +61,8 @@ public class ZoneBoundaryCrossingTest {
     public void canGetTimeUsingWrapper() {
         context.checking(new Expectations() {{
         }});
-        assertEquals(mockEntry.getTime(),LOCALTIME);
-        assertEquals(mockExit.getTime(),LOCALTIME);
+        assertEquals(mockEntry.getTime(), LOCALTIME);
+        assertEquals(mockExit.getTime(), LOCALTIME);
     }
 
 }

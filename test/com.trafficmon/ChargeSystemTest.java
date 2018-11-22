@@ -33,7 +33,7 @@ public class ChargeSystemTest {
     @Test
     public void oldSystemCharges5pEveryMinRoundUp() throws InterruptedException {
         chargeSystem.vehicleEnteringZone(Vehicle.withRegistration("A123 XYZ"));
-        Thread.sleep(1000);
+        Thread.sleep(2000);
         chargeSystem.vehicleLeavingZone(Vehicle.withRegistration("A123 XYZ"));
         chargeSystem.calculateCharges();
         assertTrue(output.toString().contains(
