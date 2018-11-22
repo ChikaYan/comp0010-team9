@@ -21,7 +21,7 @@ public class ZoneBoundaryCrossing {
         return vehicle;
     }
 
-    // keep this?
+    // keep this? -- will be removed when implementing new functions
     public long timestamp() {
         return time.toSecondOfDay();
     }

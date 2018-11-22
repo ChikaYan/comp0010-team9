@@ -7,6 +7,7 @@ public class CongestionChargeSystem {
 
     public static final BigDecimal CHARGE_RATE_POUNDS_PER_MINUTE = new BigDecimal(0.05);
 
+    private final AccountManager paymentSystem = new PaymentSystem();
     private final List<ZoneBoundaryCrossing> eventLog = new ArrayList<ZoneBoundaryCrossing>();
 
     public void vehicleEnteringZone(Vehicle vehicle) {
@@ -20,11 +21,7 @@ public class CongestionChargeSystem {
         eventLog.add(new ZoneBoundaryCrossing(vehicle, new SystemClock(),EventType.EXIT));
     }
 
-    // modified to make operation team a parameter
-    // that way method can be tested through unit test
-    // and different operation team can be used for charging
-    // same for registered customer accounts service
-    // need to change back -- DON'T CHANGE PUBLIC API
+    // DON'T CHANGE PUBLIC API
     public void calculateCharges() {
 
         Map<Vehicle, List<ZoneBoundaryCrossing>> crossingsByVehicle = new HashMap<Vehicle, List<ZoneBoundaryCrossing>>();
@@ -41,18 +38,12 @@ public class CongestionChargeSystem {
             List<ZoneBoundaryCrossing> crossings = vehicleCrossings.getValue();
 
             if (!checkOrderingOf(crossings)) {
-                OperationsTeam.getInstance().triggerInvestigationInto(vehicle);
+                paymentSystem.triggerInvestigationInto(vehicle);
             } else {
 
                 BigDecimal charge = calculateChargeForTimeInZone(crossings);
 
-                try {
-                    RegisteredCustomerAccountsService.getInstance().accountFor(vehicle).deduct(charge);
-                } catch (InsufficientCreditException ice) {
-                    OperationsTeam.getInstance().issuePenaltyNotice(vehicle, charge);
-                } catch (AccountNotRegisteredException e) {
-                    OperationsTeam.getInstance().issuePenaltyNotice(vehicle, charge);
-                }
+                paymentSystem.deductCharge(vehicle,charge);
             }
         }
     }
