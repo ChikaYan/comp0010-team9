@@ -7,18 +7,26 @@ public class CongestionChargeSystem {
 
     public static final BigDecimal CHARGE_RATE_POUNDS_PER_MINUTE = new BigDecimal(0.05);
 
-    private final AccountManager paymentSystem = new PaymentSystem();
+    private final AccountManager paymentSystem;
     private final List<ZoneBoundaryCrossing> eventLog = new ArrayList<ZoneBoundaryCrossing>();
+    // use polymorphism to enable testing or convenient future changes
+    public CongestionChargeSystem() {
+        paymentSystem = new PaymentSystem();
+    }
+
+    public CongestionChargeSystem(AccountManager paymentSystem) {
+        this.paymentSystem = paymentSystem;
+    }
 
     public void vehicleEnteringZone(Vehicle vehicle) {
-        eventLog.add(new ZoneBoundaryCrossing(vehicle, new SystemClock(),EventType.ENTRY));
+        eventLog.add(new ZoneBoundaryCrossing(vehicle, new SystemClock(), EventType.ENTRY));
     }
 
     public void vehicleLeavingZone(Vehicle vehicle) {
         if (!previouslyRegistered(vehicle)) {
             return;
         }
-        eventLog.add(new ZoneBoundaryCrossing(vehicle, new SystemClock(),EventType.EXIT));
+        eventLog.add(new ZoneBoundaryCrossing(vehicle, new SystemClock(), EventType.EXIT));
     }
 
     // DON'T CHANGE PUBLIC API
@@ -43,7 +51,7 @@ public class CongestionChargeSystem {
 
                 BigDecimal charge = calculateChargeForTimeInZone(crossings);
 
-                paymentSystem.deductCharge(vehicle,charge);
+                paymentSystem.deductCharge(vehicle, charge);
             }
         }
     }
