@@ -17,7 +17,7 @@ public class ZoneBoundaryCrossingTest {
     @Rule
     public JUnitRuleMockery context = new JUnitRuleMockery();
 
-    private final TimeGetter timeGetter = context.mock(TimeGetter.class);
+    private final Clock clock = context.mock(Clock.class);
 
     private Vehicle vehicle = Vehicle.withRegistration("A123 XYZ");
 
@@ -27,11 +27,11 @@ public class ZoneBoundaryCrossingTest {
     @Before
     public void setUpMockEvents(){
         context.checking(new Expectations() {{
-            exactly(2).of(timeGetter).getCurrentTime();
+            exactly(2).of(clock).getCurrentTime();
             will(returnValue(LOCALTIME));
         }});
-        mockEntry = new EntryEvent(vehicle, timeGetter);
-        mockExit = new EntryEvent(vehicle, timeGetter);
+        mockEntry = new EntryEvent(vehicle, clock);
+        mockExit = new EntryEvent(vehicle, clock);
     }
 
     @Test
@@ -43,7 +43,7 @@ public class ZoneBoundaryCrossingTest {
     // old test for timestamp()
     @Test
     public void canRecordTimeStamp() throws InterruptedException {
-        TimeGetter timeWrapper = new TimeWrapper();
+        Clock timeWrapper = new SystemClock();
         EntryEvent entry1 = new EntryEvent(vehicle, timeWrapper);
         Thread.sleep(1000);
         EntryEvent entry2 = new EntryEvent(vehicle, timeWrapper);

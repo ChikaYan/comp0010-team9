@@ -2,6 +2,6 @@ package com.trafficmon;
 
 import java.time.LocalTime;
 
-public interface TimeGetter {
+public interface Clock {
     LocalTime getCurrentTime();
 }
