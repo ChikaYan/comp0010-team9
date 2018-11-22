@@ -5,11 +5,11 @@ public class Test {
         CongestionChargeSystem ccs = new CongestionChargeSystem();
         ccs.vehicleEnteringZone(Vehicle.withRegistration("A123 XYZ"));
         delaySeconds(3);
-        ccs.vehicleLeavingZone(Vehicle.withRegistration("A123 XYZ"));
-        delaySeconds(3);
         ccs.vehicleEnteringZone(Vehicle.withRegistration("A123 XYZ"));
-        delaySeconds(3);
-        ccs.vehicleLeavingZone(Vehicle.withRegistration("A123 XYZ"));
+//        delaySeconds(3);
+//        ccs.vehicleEnteringZone(Vehicle.withRegistration("A123 XYZ"));
+//        delaySeconds(3);
+//        ccs.vehicleLeavingZone(Vehicle.withRegistration("A123 XYZ"));
         ccs.calculateCharges();
     }
 

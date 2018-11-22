@@ -3,7 +3,9 @@ package com.trafficmon;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+
 import static org.junit.Assert.*;
+
 import org.jmock.Expectations;
 import org.jmock.integration.junit4.JUnitRuleMockery;
 
@@ -18,24 +20,38 @@ public class ChargeSystemTest {
     private final CongestionChargeSystem chargeSystem = new CongestionChargeSystem();
 
     @Before
-    public void setUpSystemOut(){
+    public void setUpSystemOut() {
         System.setOut(new PrintStream(output));
     }
 
     @Test
-    public void enterBefore2AndStayUpTo4IsChargedFor6(){
-        
+    public void enterBefore2AndStayUpTo4IsChargedFor6() {
+
     }
 
 
     @Test
     public void oldSystemCharges5pEveryMinRoundUp() throws InterruptedException {
         chargeSystem.vehicleEnteringZone(Vehicle.withRegistration("A123 XYZ"));
-        Thread.sleep( 1000);
+        Thread.sleep(1000);
         chargeSystem.vehicleLeavingZone(Vehicle.withRegistration("A123 XYZ"));
         chargeSystem.calculateCharges();
+        assertTrue(output.toString().contains(
+                "Charge made to account of Fred Bloggs, £0.05 deducted, balance:"));
+    }
 
-        assertTrue(output.toString().contains("Charge made to account of Fred Bloggs, £0.05 deducted, balance:"));
+    @Test
+    public void mismatchedEntryExitsTriggerInvestigation() throws InterruptedException {
+        chargeSystem.vehicleEnteringZone(Vehicle.withRegistration("A123 XYZ"));
+        chargeSystem.vehicleEnteringZone(Vehicle.withRegistration("A123 XYZ"));
+        chargeSystem.calculateCharges();
+        assertEquals(output.toString(),
+                "Mismatched entries/exits. Triggering investigation into vehicle: Vehicle [A123 XYZ]\r\n");
+        output.reset();
+        chargeSystem.vehicleLeavingZone(Vehicle.withRegistration("A123 XYZ"));
+        chargeSystem.calculateCharges();
+        assertEquals(output.toString(),
+                "Mismatched entries/exits. Triggering investigation into vehicle: Vehicle [A123 XYZ]\r\n");
     }
 
 //    @Test
