@@ -19,14 +19,14 @@ public class CongestionChargeSystem {
     }
 
     public void vehicleEnteringZone(Vehicle vehicle) {
-        eventLog.add(new ZoneBoundaryCrossing(vehicle, new SystemClock(), EventType.ENTRY));
+        eventLog.add(new ZoneBoundaryCrossing(vehicle, EventType.ENTRY));
     }
 
     public void vehicleLeavingZone(Vehicle vehicle) {
         if (!previouslyRegistered(vehicle)) {
             return;
         }
-        eventLog.add(new ZoneBoundaryCrossing(vehicle, new SystemClock(), EventType.EXIT));
+        eventLog.add(new ZoneBoundaryCrossing(vehicle, EventType.EXIT));
     }
 
     // DON'T CHANGE PUBLIC API
