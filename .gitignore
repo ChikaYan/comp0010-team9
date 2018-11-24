@@ -4,6 +4,9 @@
 # Log file
 *.log
 
+# Helper class for IDEA debugger
+DebugHelper.java
+
 # BlueJ files
 *.ctxt
 
