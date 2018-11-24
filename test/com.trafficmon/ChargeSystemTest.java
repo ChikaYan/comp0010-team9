@@ -30,19 +30,19 @@ public class ChargeSystemTest {
         System.setOut(new PrintStream(output));
     }
 
-//    @Test
-//    public void enterBefore2AndStayUpTo4IsChargedFor6() throws AccountNotRegisteredException, InsufficientCreditException {
-//        MockClock mockClock = new MockClock(6, 0);
-//        CongestionChargeSystem chargeSystem =
-//                new CongestionChargeSystem(mockPayment, mockClock);
-//        chargeSystem.vehicleEnteringZone(testVehicle);
-//        mockClock.advanceBy(2, 0);
-//        chargeSystem.vehicleLeavingZone(testVehicle);
-//        chargeSystem.calculateCharges();
-//        context.checking(new Expectations() {{
-//            oneOf(mockPayment).deductCharge(testVehicle, 4);
-//        }});
-//    }
+    @Test
+    public void enterBefore2AndStayUpTo4IsChargedFor6() throws AccountNotRegisteredException, InsufficientCreditException {
+        MockClock mockClock = new MockClock(6, 0);
+        CongestionChargeSystem chargeSystem =
+                new CongestionChargeSystem(mockPayment, mockClock);
+        chargeSystem.vehicleEnteringZone(testVehicle);
+        mockClock.advanceBy(2, 0);
+        chargeSystem.vehicleLeavingZone(testVehicle);
+        context.checking(new Expectations() {{
+            oneOf(mockPayment).deductCharge(testVehicle, 4);
+        }});
+        chargeSystem.calculateCharges();
+    }
 
 
 
@@ -66,15 +66,15 @@ public class ChargeSystemTest {
 
     //--------------------------OLD TESTS---------------------------
 
-    @Test
-    public void oldSystemCharges5pEveryMinRoundUp() throws InterruptedException {
-        chargeSystem.vehicleEnteringZone(testVehicle);
-        Thread.sleep(1000);
-        chargeSystem.vehicleLeavingZone(testVehicle);
-        chargeSystem.calculateCharges();
-        assertTrue(output.toString().contains(
-                "Charge made to account of Fred Bloggs, £0.05 deducted, balance:"));
-    }
+//    @Test
+//    public void oldSystemCharges5pEveryMinRoundUp() throws InterruptedException {
+//        chargeSystem.vehicleEnteringZone(testVehicle);
+//        Thread.sleep(1000);
+//        chargeSystem.vehicleLeavingZone(testVehicle);
+//        chargeSystem.calculateCharges();
+//        assertTrue(output.toString().contains(
+//                "Charge made to account of Fred Bloggs, £0.05 deducted, balance:"));
+//    }
 
     @Test
     public void mismatchedEntryExitsTriggerInvestigation() throws InterruptedException {

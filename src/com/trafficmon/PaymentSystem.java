@@ -9,12 +9,13 @@ public class PaymentSystem implements AccountManager {
     }
 
     @Override
-    public void deductCharge(Vehicle vehicle, BigDecimal charge) throws AccountNotRegisteredException, InsufficientCreditException {
-        RegisteredCustomerAccountsService.getInstance().accountFor(vehicle).deduct(charge);
+    public void deductCharge(Vehicle vehicle, int charge) throws AccountNotRegisteredException, InsufficientCreditException {
+        RegisteredCustomerAccountsService.getInstance()
+                .accountFor(vehicle).deduct(BigDecimal.valueOf(charge));
     }
 
     @Override
-    public void issuePenalty(Vehicle vehicle, BigDecimal charge) {
-        OperationsTeam.getInstance().issuePenaltyNotice(vehicle, charge);
+    public void issuePenalty(Vehicle vehicle, int charge) {
+        OperationsTeam.getInstance().issuePenaltyNotice(vehicle, BigDecimal.valueOf(charge));
     }
 }

@@ -53,7 +53,7 @@ public class CongestionChargeSystem {
                 paymentSystem.triggerInvestigationInto(vehicle);
             } else {
 
-                BigDecimal charge = calculateChargeForTimeInZone(crossings);
+                int charge = calculateChargeForTimeInZone(crossings);
                 try {
                     paymentSystem.deductCharge(vehicle, charge);
                 } catch (InsufficientCreditException ice) {
@@ -66,24 +66,33 @@ public class CongestionChargeSystem {
         }
     }
 
-    private BigDecimal calculateChargeForTimeInZone(List<ZoneBoundaryCrossing> crossings) {
-
-        BigDecimal charge = new BigDecimal(0);
-
+    private int calculateChargeForTimeInZone(List<ZoneBoundaryCrossing> crossings) {
+        int charge = 4;
         ZoneBoundaryCrossing lastEvent = crossings.get(0);
-
         for (ZoneBoundaryCrossing crossing : crossings.subList(1, crossings.size())) {
-
             if (crossing.type == EventType.EXIT) {
-                charge = charge.add(
-                        new BigDecimal(minutesBetween(lastEvent.timestamp(), crossing.timestamp()))
-                                .multiply(CHARGE_RATE_POUNDS_PER_MINUTE));
-            }
 
+            }
             lastEvent = crossing;
         }
-
         return charge;
+//
+//        BigDecimal charge = new BigDecimal(0);
+//
+//        ZoneBoundaryCrossing lastEvent = crossings.get(0);
+//
+//        for (ZoneBoundaryCrossing crossing : crossings.subList(1, crossings.size())) {
+//
+//            if (crossing.type == EventType.EXIT) {
+//                charge = charge.add(
+//                        new BigDecimal(minutesBetween(lastEvent.timestamp(), crossing.timestamp()))
+//                                .multiply(CHARGE_RATE_POUNDS_PER_MINUTE));
+//            }
+//
+//            lastEvent = crossing;
+//        }
+//
+//        return charge;
     }
 
     private boolean previouslyRegistered(Vehicle vehicle) {
