@@ -33,7 +33,7 @@ public class ChargeSystemTest {
     @Test
     public void oldSystemCharges5pEveryMinRoundUp() throws InterruptedException {
         chargeSystem.vehicleEnteringZone(Vehicle.withRegistration("A123 XYZ"));
-        Thread.sleep(2000);
+        Thread.sleep(1000);
         chargeSystem.vehicleLeavingZone(Vehicle.withRegistration("A123 XYZ"));
         chargeSystem.calculateCharges();
         assertTrue(output.toString().contains(
@@ -52,6 +52,17 @@ public class ChargeSystemTest {
         chargeSystem.calculateCharges();
         assertEquals(output.toString(),
                 "Mismatched entries/exits. Triggering investigation into vehicle: Vehicle [A123 XYZ]\r\n");
+    }
+
+    @Test
+    public void insufficientCreditTriggersPenalty() throws InterruptedException {
+        chargeSystem.vehicleEnteringZone(Vehicle.withRegistration("none-exist vehicle"));
+        Thread.sleep(1000);
+        chargeSystem.vehicleLeavingZone(Vehicle.withRegistration("none-exist vehicle"));
+        chargeSystem.calculateCharges();
+        assertEquals(output.toString(),
+                "Penalty notice for: Vehicle [none-exist vehicle]\r\n");
+
     }
 
 //    @Test
