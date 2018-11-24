@@ -45,7 +45,6 @@ public class ChargeSystemTest {
     }
 
 
-
     private class MockClock implements Clock {
 
         private LocalTime time;
@@ -78,6 +77,11 @@ public class ChargeSystemTest {
 
     @Test
     public void mismatchedEntryExitsTriggerInvestigation() throws InterruptedException {
+        chargeSystem.vehicleEnteringZone(testVehicle);
+        chargeSystem.calculateCharges();
+        assertTrue(output.toString().contains(
+                "Charge made to account of Fred Bloggs, £0.00 deducted, balance:"));
+        output.reset();
         chargeSystem.vehicleEnteringZone(testVehicle);
         chargeSystem.vehicleEnteringZone(testVehicle);
         chargeSystem.calculateCharges();
