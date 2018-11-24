@@ -1,6 +1,9 @@
 package com.trafficmon;
 
 import java.math.BigDecimal;
+import java.time.Duration;
+import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 public class CongestionChargeSystem {
@@ -67,7 +70,35 @@ public class CongestionChargeSystem {
     }
 
     private int calculateChargeForTimeInZone(List<ZoneBoundaryCrossing> crossings) {
-        int charge = 4;
+        // make a copy of crossings
+        ArrayList<ZoneBoundaryCrossing> crosses = new ArrayList<>(crossings);
+        LocalTime lastEntryTime = null;
+        Duration overallTime = Duration.ZERO;
+        int charge = 0;
+        for (int i = 0; i < crosses.size(); i++) {
+            if (crosses.get(i).type == EventType.ENTRY) {
+                LocalTime currentTime = crosses.get(i).getTime();
+                if (lastEntryTime == null || lastEntryTime.plusHours(4).isBefore(currentTime)) {
+                    lastEntryTime = currentTime;
+                    // calc charges depending on the time (accurate to minutes)
+                    Duration timeSpent = Duration.ofMinutes(
+                            currentTime.until(crosses.get(i + 1).getTime(), ChronoUnit.MINUTES));
+                    overallTime = overallTime.plus(timeSpent);
+                    if (overallTime.toHours() > 4) {
+                        return 12;
+                    }
+                    if (currentTime.isBefore(LocalTime.of(14, 0))) {
+                        // enter before 2pm
+                        charge += 6;
+                    } else {
+                        charge += 4;
+                    }
+                } else {
+                    // vehicle has entered within 4 hours, don't count this towards charge
+                }
+            }
+        }
+
         ZoneBoundaryCrossing lastEvent = crossings.get(0);
         for (ZoneBoundaryCrossing crossing : crossings.subList(1, crossings.size())) {
             if (crossing.type == EventType.EXIT) {
