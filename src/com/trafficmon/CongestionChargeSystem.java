@@ -8,25 +8,29 @@ public class CongestionChargeSystem {
     public static final BigDecimal CHARGE_RATE_POUNDS_PER_MINUTE = new BigDecimal(0.05);
 
     private final AccountManager paymentSystem;
+    private final Clock systemClock;
     private final List<ZoneBoundaryCrossing> eventLog = new ArrayList<ZoneBoundaryCrossing>();
+
     // use polymorphism to enable testing or convenient future changes
     public CongestionChargeSystem() {
         paymentSystem = new PaymentSystem();
+        systemClock = new SystemClock();
     }
 
-    public CongestionChargeSystem(AccountManager paymentSystem) {
+    public CongestionChargeSystem(AccountManager paymentSystem, Clock systemClock) {
         this.paymentSystem = paymentSystem;
+        this.systemClock = systemClock;
     }
 
     public void vehicleEnteringZone(Vehicle vehicle) {
-        eventLog.add(new ZoneBoundaryCrossing(vehicle, new SystemClock(), EventType.ENTRY));
+        eventLog.add(new ZoneBoundaryCrossing(vehicle, systemClock, EventType.ENTRY));
     }
 
     public void vehicleLeavingZone(Vehicle vehicle) {
         if (!previouslyRegistered(vehicle)) {
             return;
         }
-        eventLog.add(new ZoneBoundaryCrossing(vehicle, new SystemClock(), EventType.EXIT));
+        eventLog.add(new ZoneBoundaryCrossing(vehicle, systemClock, EventType.EXIT));
     }
 
     // DON'T CHANGE PUBLIC API

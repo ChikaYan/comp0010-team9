@@ -1,7 +1,7 @@
 package com.trafficmon;
 
 public class Vehicle {
-
+    // separate this from other tests if have time
     private final String registration;
 
     private Vehicle(String registration) {
