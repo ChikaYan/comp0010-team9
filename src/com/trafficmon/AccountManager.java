@@ -6,5 +6,7 @@ import java.math.BigDecimal;
 public interface AccountManager {
     void triggerInvestigationInto(Vehicle vehicle);
 
-    void deductCharge (Vehicle vehicle, BigDecimal charge);
+    void deductCharge(Vehicle vehicle, BigDecimal charge) throws AccountNotRegisteredException, InsufficientCreditException;
+
+    void issuePenalty(Vehicle vehicle, BigDecimal charge);
 }

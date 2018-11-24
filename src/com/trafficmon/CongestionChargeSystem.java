@@ -50,8 +50,14 @@ public class CongestionChargeSystem {
             } else {
 
                 BigDecimal charge = calculateChargeForTimeInZone(crossings);
+                try {
+                    paymentSystem.deductCharge(vehicle, charge);
+                } catch (InsufficientCreditException ice) {
+                    paymentSystem.issuePenalty(vehicle, charge);
+                } catch (AccountNotRegisteredException e) {
+                    paymentSystem.issuePenalty(vehicle, charge);
+                }
 
-                paymentSystem.deductCharge(vehicle, charge);
             }
         }
     }
