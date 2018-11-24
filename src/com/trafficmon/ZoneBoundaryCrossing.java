@@ -3,6 +3,7 @@ package com.trafficmon;
 import java.time.LocalTime;
 
 // merge EntryEvent and ExitEvent into parent class to reduce coupling
+// EntryEvent and ExitEvent will still be added to this package, but the package itself stops using it
 // ZoneBoundaryCrossing is at the center of this package can it shouldn't be used in external code
 
 public class ZoneBoundaryCrossing {
@@ -21,7 +22,7 @@ public class ZoneBoundaryCrossing {
         return vehicle;
     }
 
-    // keep this? -- will be removed when implementing new functions
+    // this is kept for Entry/ExitEvent
     public long timestamp() {
         return time.toSecondOfDay();
     }

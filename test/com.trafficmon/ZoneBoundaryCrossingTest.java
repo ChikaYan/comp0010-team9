@@ -40,17 +40,16 @@ public class ZoneBoundaryCrossingTest {
         assertSame(mockExit.getVehicle(), vehicle);
     }
 
-//     old test for timestamp()
+    //old test for timestamp() and Entry/ExitEvent
     @Test
     public void canRecordTimeStamp() throws InterruptedException {
-        Clock timeWrapper = new SystemClock();
-        ZoneBoundaryCrossing entry1 = new ZoneBoundaryCrossing(vehicle, timeWrapper,EventType.ENTRY);
+        EntryEvent entry1 = new EntryEvent(vehicle);
         Thread.sleep(1000);
-        ZoneBoundaryCrossing entry2 = new ZoneBoundaryCrossing(vehicle, timeWrapper,EventType.EXIT);
+        EntryEvent entry2 = new EntryEvent(vehicle);
         Thread.sleep(1000);
-        ZoneBoundaryCrossing exit1 = new ZoneBoundaryCrossing(vehicle, timeWrapper,EventType.EXIT);
+        ExitEvent exit1 = new ExitEvent(vehicle);
         Thread.sleep(1000);
-        ZoneBoundaryCrossing exit2 = new ZoneBoundaryCrossing(vehicle, timeWrapper,EventType.EXIT);
+        ExitEvent exit2 = new ExitEvent(vehicle);
 
         assertTrue(entry1.timestamp() < entry2.timestamp());
         assertTrue(entry2.timestamp() < exit1.timestamp());

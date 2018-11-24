@@ -16,6 +16,9 @@ public class ChargeSystemTest {
     @Rule
     public JUnitRuleMockery context = new JUnitRuleMockery();
 
+    private final AccountManager paymentSystem = context.mock(AccountManager.class);
+    private final Clock clock = context.mock(Clock.class);
+
     private final ByteArrayOutputStream output = new ByteArrayOutputStream();
     private final CongestionChargeSystem chargeSystem = new CongestionChargeSystem();
 
