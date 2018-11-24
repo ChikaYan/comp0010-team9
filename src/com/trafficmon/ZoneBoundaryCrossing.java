@@ -11,12 +11,6 @@ public class ZoneBoundaryCrossing {
     private final Vehicle vehicle;
     private LocalTime time;
 
-    public ZoneBoundaryCrossing(Vehicle vehicle, EventType type) {
-        this.vehicle = vehicle;
-        this.time = new SystemClock().getCurrentTime();
-        this.type = type;
-    }
-
     // change to use time wrapper
     public ZoneBoundaryCrossing(Vehicle vehicle, Clock time, EventType type) {
         this.vehicle = vehicle;
