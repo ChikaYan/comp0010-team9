@@ -77,7 +77,7 @@ public class ChargeSystemTest {
     }
 
     @Test
-    public void enterAfter2AndGoOutThenGoBackUpTo4IsChargedFor4()throws AccountNotRegisteredException, InsufficientCreditException{
+    public void enterAfter2AndGoOutThenGoBackAndStayUpTo4IsChargedFor4()throws AccountNotRegisteredException, InsufficientCreditException{
         MockClock mockClock = new MockClock(15, 0);
         CongestionChargeSystem chargeSystem =
                 new CongestionChargeSystem(mockPayment, mockClock);
