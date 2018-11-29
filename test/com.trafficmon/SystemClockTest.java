@@ -10,11 +10,10 @@ public class SystemClockTest {
     private final Clock systemClock = new SystemClock();
 
     @Test
-    public void canGetCurrentTimeAccurateToSeconds() {
+    public void canGetCurrentTimeAccurateToSeconds() { // TODO: solve the unstability
         LocalTime sys = systemClock.getCurrentTime();
         LocalTime now = LocalTime.now();
-        assertTrue(sys.isBefore(now));
+        assertTrue(sys.isBefore(now) || sys.equals(now));
         assertTrue(sys.isAfter(now.minusSeconds(1)));
-
     }
 }
