@@ -19,7 +19,7 @@ public class ZoneBoundaryCrossingTest {
 
     private final Clock clock = context.mock(Clock.class);
 
-    private Vehicle vehicle = Vehicle.withRegistration("A123 XYZ");
+    private Vehicle testVehicle = Vehicle.withRegistration("A123 XYZ");
 
     private ZoneBoundaryCrossing mockEntry;
     private ZoneBoundaryCrossing mockExit;
@@ -30,30 +30,14 @@ public class ZoneBoundaryCrossingTest {
             exactly(2).of(clock).getCurrentTime();
             will(returnValue(LOCALTIME));
         }});
-        mockEntry = new ZoneBoundaryCrossing(vehicle, clock, EventType.ENTRY);
-        mockExit = new ZoneBoundaryCrossing(vehicle, clock, EventType.EXIT);
+        mockEntry = new ZoneBoundaryCrossing(testVehicle, clock, EventType.ENTRY);
+        mockExit = new ZoneBoundaryCrossing(testVehicle, clock, EventType.EXIT);
     }
 
     @Test
     public void canPassAndGetVehicle() {
-        assertSame(mockEntry.getVehicle(), vehicle);
-        assertSame(mockExit.getVehicle(), vehicle);
-    }
-
-    //old test for timestamp() and Entry/ExitEvent
-    @Test
-    public void canRecordTimeStamp() throws InterruptedException {
-        EntryEvent entry1 = new EntryEvent(vehicle);
-        Thread.sleep(1000);
-        EntryEvent entry2 = new EntryEvent(vehicle);
-        Thread.sleep(1000);
-        ExitEvent exit1 = new ExitEvent(vehicle);
-        Thread.sleep(1000);
-        ExitEvent exit2 = new ExitEvent(vehicle);
-
-        assertTrue(entry1.timestamp() < entry2.timestamp());
-        assertTrue(entry2.timestamp() < exit1.timestamp());
-        assertTrue(exit1.timestamp() < exit2.timestamp());
+        assertSame(mockEntry.getVehicle(), testVehicle);
+        assertSame(mockExit.getVehicle(), testVehicle);
     }
 
     @Test
