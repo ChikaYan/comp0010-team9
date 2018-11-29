@@ -11,7 +11,7 @@ public class SystemClockTest {
 
     @Test
     public void canGetCurrentTimeAccurateToSeconds() { // TODO: solve the unstability
-        LocalTime sys = systemClock.getCurrentTime();
+        LocalTime sys = systemClock.getTime();
         LocalTime now = LocalTime.now();
         assertTrue(sys.isBefore(now) || sys.equals(now));
         assertTrue(sys.isAfter(now.minusSeconds(1)));

@@ -1,17 +1,11 @@
 package com.trafficmon;
 
 import org.jmock.Expectations;
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
-
 import org.jmock.integration.junit4.JUnitRuleMockery;
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
-import java.math.BigDecimal;
 import java.time.LocalTime;
 
 public class ChargeSystemTest {
@@ -104,13 +98,32 @@ public class ChargeSystemTest {
     private class MockClock implements Clock {
         private LocalTime time;
 
-        MockClock(int hour, int min) {
-            this.time = LocalTime.of(hour, min);
+        public MockClock(int hour, int minute) {
+            time = LocalTime.of(hour, minute);
+        }
+
+        private MockClock(LocalTime time) {
+            this.time = time;
         }
 
         @Override
-        public LocalTime getCurrentTime() {
+        public LocalTime getTime() {
             return time;
+        }
+
+        @Override
+        public long toSecondOfDay() {
+            return time.toSecondOfDay();
+        }
+
+        @Override
+        public Clock plusHours(int hours) {
+            return new MockClock(time.plusHours(hours));
+        }
+
+        @Override
+        public boolean isBefore(Clock time2) {
+            return time.isBefore(time2.getTime());
         }
 
         void advanceBy(int hour, int min) {

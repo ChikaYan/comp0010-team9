@@ -13,26 +13,14 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
 public class ZoneBoundaryCrossingTest {
-    private static final LocalTime LOCALTIME = LocalTime.NOON;
     @Rule
     public JUnitRuleMockery context = new JUnitRuleMockery();
 
     private final Clock clock = context.mock(Clock.class);
 
     private Vehicle testVehicle = Vehicle.withRegistration("A123 XYZ");
-
-    private ZoneBoundaryCrossing mockEntry;
-    private ZoneBoundaryCrossing mockExit;
-
-    @Before
-    public void setUpMockEvents() {
-        context.checking(new Expectations() {{
-            exactly(2).of(clock).getCurrentTime();
-            will(returnValue(LOCALTIME));
-        }});
-        mockEntry = new ZoneBoundaryCrossing(testVehicle, clock, EventType.ENTRY);
-        mockExit = new ZoneBoundaryCrossing(testVehicle, clock, EventType.EXIT);
-    }
+    private ZoneBoundaryCrossing mockEntry = new ZoneBoundaryCrossing(testVehicle, clock, EventType.ENTRY);
+    private ZoneBoundaryCrossing mockExit = new ZoneBoundaryCrossing(testVehicle, clock, EventType.EXIT);
 
     @Test
     public void canPassAndGetVehicle() {
@@ -44,8 +32,7 @@ public class ZoneBoundaryCrossingTest {
     public void canGetTimeUsingWrapper() {
         context.checking(new Expectations() {{
         }});
-        assertEquals(mockEntry.getTime(), LOCALTIME);
-        assertEquals(mockExit.getTime(), LOCALTIME);
+        assertEquals(mockEntry.getClock(), clock);
+        assertEquals(mockExit.getClock(), clock);
     }
-
 }
