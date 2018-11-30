@@ -49,7 +49,7 @@ public class OldSystemIntegratedTest {
     }
 
     @Test
-    public void insufficientCreditTriggersPenalty() throws InterruptedException {
+    public void nonExistVehicleTriggersPenalty() throws InterruptedException {
         chargeSystem.vehicleEnteringZone(Vehicle.withRegistration("none-exist vehicle"));
         Thread.sleep(1000);
         chargeSystem.vehicleLeavingZone(Vehicle.withRegistration("none-exist vehicle"));
