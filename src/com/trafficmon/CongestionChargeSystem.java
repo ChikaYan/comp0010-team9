@@ -93,37 +93,11 @@ public class CongestionChargeSystem {
                     } else {
                         charge += 4;
                     }
-                } else {
-                    // vehicle has entered within 4 hours, don't count this towards charge
                 }
+                // vehicle has entered within 4 hours, don't count this towards charge
             }
-        }
-
-        ZoneBoundaryCrossing lastEvent = crossings.get(0);
-        for (ZoneBoundaryCrossing crossing : crossings.subList(1, crossings.size())) {
-            if (crossing.type == EventType.EXIT) {
-
-            }
-            lastEvent = crossing;
         }
         return charge;
-//
-//        BigDecimal charge = new BigDecimal(0);
-//
-//        ZoneBoundaryCrossing lastEvent = crossings.get(0);
-//
-//        for (ZoneBoundaryCrossing crossing : crossings.subList(1, crossings.size())) {
-//
-//            if (crossing.type == EventType.EXIT) {
-//                charge = charge.add(
-//                        new BigDecimal(minutesBetween(lastEvent.timestamp(), crossing.timestamp()))
-//                                .multiply(CHARGE_RATE_POUNDS_PER_MINUTE));
-//            }
-//
-//            lastEvent = crossing;
-//        }
-//
-//        return charge;
     }
 
     private boolean previouslyRegistered(Vehicle vehicle) {

@@ -56,23 +56,5 @@ public class OldSystemIntegratedTest {
         chargeSystem.calculateCharges();
         assertEquals(output.toString(),
                 "Penalty notice for: Vehicle [none-exist vehicle]\r\n");
-
     }
-
-//    @Test
-//    public void checkVehicleEnteringZone(){
-//        CongestionChargeSystem ccs = new CongestionChargeSystem();
-//        Vehicle vehicle = Vehicle.withRegistration("A123 XYZ");
-//        //ccs.vehicleEnteringZone(Vehicle vehicle);
-//
-//    }
-//
-//    @Test
-//    public void checkVehicleLeavingZone(){
-//
-//    }
-//    public void checkMinutesBetween(){
-//        CongestionChargeSystem ccs = new CongestionChargeSystem();
-//        assertEquals(ccs.minutesBetween(), 1L);
-//    }
 }
