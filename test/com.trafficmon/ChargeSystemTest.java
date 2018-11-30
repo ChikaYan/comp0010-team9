@@ -154,6 +154,42 @@ public class ChargeSystemTest {
     }
 
     @Test
+    public void onceBefore2andAfter2IsChargedFor10() throws AccountNotRegisteredException, InsufficientCreditException{
+        MockClock mockClock = new MockClock(0, 0);
+        CongestionChargeSystem chargeSystem =
+                new CongestionChargeSystem(mockPayment, mockClock);
+        chargeSystem.vehicleEnteringZone(testVehicle); //12am in
+        mockClock.advanceBy(0, 1);
+        chargeSystem.vehicleLeavingZone(testVehicle); //leave at 12.01
+        mockClock.advanceBy(15, 1);
+        chargeSystem.vehicleEnteringZone(testVehicle); //15.02 in
+        mockClock.advanceBy(0, 1);
+        chargeSystem.vehicleLeavingZone(testVehicle);//leave at 15.03
+        context.checking(new Expectations() {{
+            oneOf(mockPayment).deductCharge(testVehicle, 10);
+        }});
+        chargeSystem.calculateCharges();
+    }
+
+    @Test
+    public void enter2HoursBefore2pmAnd3HoursAfter2pmIsChargedFor12() throws AccountNotRegisteredException, InsufficientCreditException{
+        MockClock mockClock = new MockClock(0, 0);
+        CongestionChargeSystem chargeSystem =
+                new CongestionChargeSystem(mockPayment, mockClock);
+        chargeSystem.vehicleEnteringZone(testVehicle); //12am in
+        mockClock.advanceBy(2, 0);
+        chargeSystem.vehicleLeavingZone(testVehicle); //leave at 2.00
+        mockClock.advanceBy(11, 0);
+        chargeSystem.vehicleEnteringZone(testVehicle); //15.00 in
+        mockClock.advanceBy(3, 0);
+        chargeSystem.vehicleLeavingZone(testVehicle);//leave at 18.00
+        context.checking(new Expectations() {{
+            oneOf(mockPayment).deductCharge(testVehicle, 12);
+        }});
+        chargeSystem.calculateCharges();
+    }
+
+    @Test
     public void mismatchedEntriesTriggerInvestigation() {
         MockClock mockClock = new MockClock(0, 0);
         CongestionChargeSystem chargeSystem =
