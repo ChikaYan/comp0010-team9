@@ -115,26 +115,27 @@ public class ChargeSystemTest {
     }
 
     @Test
-    public void enter3TimesBefore2pmWith4HourIntervalsIsChargedFor18() throws AccountNotRegisteredException, InsufficientCreditException{
-        MockClock mockClock = new MockClock(00, 0);
+    public void enter3TimesBefore2pmWith4HourIntervalsIsChargedFor18() throws AccountNotRegisteredException, InsufficientCreditException {
+        MockClock mockClock = new MockClock(0, 0);
         CongestionChargeSystem chargeSystem =
                 new CongestionChargeSystem(mockPayment, mockClock);
         chargeSystem.vehicleEnteringZone(testVehicle); //12am in
-        mockClock.advanceBy(0,1);
+        mockClock.advanceBy(0, 1);
         chargeSystem.vehicleLeavingZone(testVehicle); //leave at 12.01
-        mockClock.advanceBy(4,1);
+        mockClock.advanceBy(4, 1);
         chargeSystem.vehicleEnteringZone(testVehicle); //4.02 in
-        mockClock.advanceBy(0,1);
+        mockClock.advanceBy(0, 1);
         chargeSystem.vehicleLeavingZone(testVehicle);//leave at 4.03
-        mockClock.advanceBy(4,1);
+        mockClock.advanceBy(4, 1);
         chargeSystem.vehicleEnteringZone(testVehicle);//8.04 in
-        mockClock.advanceBy(0,1);
+        mockClock.advanceBy(0, 1);
         chargeSystem.vehicleLeavingZone(testVehicle);//8.05 out
         context.checking(new Expectations() {{
             oneOf(mockPayment).deductCharge(testVehicle, 18);
         }});
         chargeSystem.calculateCharges();
     }
+
     private class MockClock implements Clock {
         private LocalTime time;
 
@@ -152,7 +153,51 @@ public class ChargeSystemTest {
         }
     }
 
-    //--------------------------OLD TESTS---------------------------
+    @Test
+    public void mismatchedEntriesTriggerInvestigation() {
+        MockClock mockClock = new MockClock(0, 0);
+        CongestionChargeSystem chargeSystem =
+                new CongestionChargeSystem(mockPayment, mockClock);
+        chargeSystem.vehicleEnteringZone(testVehicle);
+        mockClock.advanceBy(0, 1);
+        chargeSystem.vehicleEnteringZone(testVehicle);
+        context.checking(new Expectations() {{
+            oneOf(mockPayment).triggerInvestigationInto(testVehicle);
+        }});
 
+        chargeSystem.calculateCharges();
+    }
+
+    @Test
+    public void mismatchedExitsTriggerInvestigation() {
+        MockClock mockClock = new MockClock(0, 0);
+        CongestionChargeSystem chargeSystem =
+                new CongestionChargeSystem(mockPayment, mockClock);
+        chargeSystem.vehicleEnteringZone(testVehicle);
+        mockClock.advanceBy(0,1);
+        chargeSystem.vehicleLeavingZone(testVehicle);
+        mockClock.advanceBy(0,1);
+        chargeSystem.vehicleLeavingZone(testVehicle);
+        context.checking(new Expectations() {{
+            oneOf(mockPayment).triggerInvestigationInto(testVehicle);
+        }});
+
+        chargeSystem.calculateCharges();
+    }
+
+    @Test
+    public void eventsWithWrongTimeTriggerInvestigation() {
+        MockClock mockClock = new MockClock(1, 0);
+        CongestionChargeSystem chargeSystem =
+                new CongestionChargeSystem(mockPayment, mockClock);
+        chargeSystem.vehicleEnteringZone(testVehicle);
+        mockClock.advanceBy(0,-1);
+        chargeSystem.vehicleLeavingZone(testVehicle);
+        context.checking(new Expectations() {{
+            oneOf(mockPayment).triggerInvestigationInto(testVehicle);
+        }});
+
+        chargeSystem.calculateCharges();
+    }
 
 }
