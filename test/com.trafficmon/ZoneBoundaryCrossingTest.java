@@ -8,9 +8,8 @@ import org.junit.Test;
 
 import java.time.LocalTime;
 
-import static org.junit.Assert.*;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
 
 public class ZoneBoundaryCrossingTest {
     private static final LocalTime LOCALTIME = LocalTime.NOON;

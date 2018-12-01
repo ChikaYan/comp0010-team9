@@ -1,7 +1,7 @@
 package com.trafficmon;
 
 public class Vehicle {
-    // no need to seperate this from other class's tests as its simple
+    // no need to separate this from other class's tests as its simple
     private final String registration;
 
     private Vehicle(String registration) {

@@ -1,16 +1,10 @@
 package com.trafficmon;
 
 import org.jmock.Expectations;
-import org.junit.Before;
+import org.jmock.integration.junit4.JUnitRuleMockery;
 import org.junit.Rule;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
-
-import org.jmock.integration.junit4.JUnitRuleMockery;
-
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
 import java.math.BigDecimal;
 import java.time.LocalTime;
 

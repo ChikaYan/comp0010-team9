@@ -1,15 +1,14 @@
 package com.trafficmon;
 
-import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class CongestionChargeSystem {
-
-    public static final BigDecimal CHARGE_RATE_POUNDS_PER_MINUTE = new BigDecimal(0.05);
-
     private final AccountManager paymentSystem;
     private final Clock systemClock;
     private final List<ZoneBoundaryCrossing> eventLog = new ArrayList<ZoneBoundaryCrossing>();
@@ -70,19 +69,17 @@ public class CongestionChargeSystem {
     }
 
     private int calculateChargeForTimeInZone(List<ZoneBoundaryCrossing> crossings) {
-        // make a copy of crossings
-        ArrayList<ZoneBoundaryCrossing> crosses = new ArrayList<>(crossings);
         LocalTime lastEntryTime = null;
         Duration overallTime = Duration.ZERO;
         int charge = 0;
-        for (int i = 0; i < crosses.size(); i++) {
-            if (crosses.get(i).type == EventType.ENTRY) {
-                LocalTime currentTime = crosses.get(i).getTime();
+        for (int i = 0; i < crossings.size(); i++) {
+            if (crossings.get(i).type == EventType.ENTRY) {
+                LocalTime currentTime = crossings.get(i).getTime();
                 if (lastEntryTime == null || lastEntryTime.plusHours(4).isBefore(currentTime)) {
                     lastEntryTime = currentTime;
                     // calc charges depending on the time (accurate to minutes)
                     Duration timeSpent = Duration.ofMinutes(
-                            currentTime.until(crosses.get(i + 1).getTime(), ChronoUnit.MINUTES));
+                            currentTime.until(crossings.get(i + 1).getTime(), ChronoUnit.MINUTES));
                     overallTime = overallTime.plus(timeSpent);
                     if (overallTime.toHours() > 4) {
                         return 12;
@@ -125,12 +122,6 @@ public class CongestionChargeSystem {
             }
             lastEvent = crossing;
         }
-
         return true;
     }
-
-    private int minutesBetween(long startTimeMs, long endTimeMs) {
-        return (int) Math.ceil((endTimeMs - startTimeMs) / (1000.0 * 60.0));
-    }
-
 }
