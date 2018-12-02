@@ -173,7 +173,7 @@ public class ChargeSystemTest {
         chargeSystem.vehicleEnteringZone(testVehicle); //12am in
         mockClock.advanceBy(2, 0);
         chargeSystem.vehicleLeavingZone(testVehicle); //leave at 2.00
-        mockClock.advanceBy(11, 0);
+        mockClock.advanceBy(13, 0);
         chargeSystem.vehicleEnteringZone(testVehicle); //15.00 in
         mockClock.advanceBy(3, 0);
         chargeSystem.vehicleLeavingZone(testVehicle);//leave at 18.00
