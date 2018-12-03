@@ -80,6 +80,20 @@ public class ChargeSystemTest {
     }
 
     @Test
+    public void enterRightAt2AndStayUpTo4HoursIsChargedFor4() throws AccountNotRegisteredException, InsufficientCreditException {
+        MockClock mockClock = new MockClock(14, 0); //enter at 6:00
+        CongestionChargeSystem chargeSystem =
+                new CongestionChargeSystem(mockPayment, mockClock);
+        chargeSystem.vehicleEnteringZone(testVehicle);
+        mockClock.advanceBy(2, 0);
+        chargeSystem.vehicleLeavingZone(testVehicle);
+        context.checking(new Expectations() {{
+            oneOf(mockPayment).deductCharge(testVehicle, 4);
+        }});
+        chargeSystem.calculateCharges();
+    }
+
+    @Test
     public void enterAfter2AndStayUpTo4IsChargedFor4() throws AccountNotRegisteredException, InsufficientCreditException {
         MockClock mockClock = new MockClock(15, 0); //enter at 15:00
         CongestionChargeSystem chargeSystem =
