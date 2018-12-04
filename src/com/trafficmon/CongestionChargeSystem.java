@@ -9,30 +9,30 @@ import java.util.List;
 import java.util.Map;
 
 public class CongestionChargeSystem {
-    private final AccountManager paymentSystem;
-    private final Clock systemClock;
+    private final AccountManager accountManager;
+    private final Clock clock;
     private final List<ZoneBoundaryCrossing> eventLog = new ArrayList<ZoneBoundaryCrossing>();
 
     // use polymorphism to enable testing or convenient future changes
     public CongestionChargeSystem() {
-        paymentSystem = new PaymentSystem();
-        systemClock = new SystemClock();
+        accountManager = new PaymentSystem();
+        clock = new SystemClock();
     }
 
-    public CongestionChargeSystem(AccountManager paymentSystem, Clock systemClock) {
-        this.paymentSystem = paymentSystem;
-        this.systemClock = systemClock;
+    public CongestionChargeSystem(AccountManager accountManager, Clock clock) {
+        this.accountManager = accountManager;
+        this.clock = clock;
     }
 
     public void vehicleEnteringZone(Vehicle vehicle) {
-        eventLog.add(new ZoneBoundaryCrossing(vehicle, systemClock, EventType.ENTRY));
+        eventLog.add(new ZoneBoundaryCrossing(vehicle, clock, EventType.ENTRY));
     }
 
     public void vehicleLeavingZone(Vehicle vehicle) {
         if (!previouslyRegistered(vehicle)) {
             return;
         }
-        eventLog.add(new ZoneBoundaryCrossing(vehicle, systemClock, EventType.EXIT));
+        eventLog.add(new ZoneBoundaryCrossing(vehicle, clock, EventType.EXIT));
     }
 
     // DON'T CHANGE PUBLIC API
@@ -52,16 +52,16 @@ public class CongestionChargeSystem {
             List<ZoneBoundaryCrossing> crossings = vehicleCrossings.getValue();
 
             if (!checkOrderingOf(crossings)) {
-                paymentSystem.triggerInvestigationInto(vehicle);
+                accountManager.triggerInvestigationInto(vehicle);
             } else {
 
                 int charge = calculateChargeForTimeInZone(crossings);
                 try {
-                    paymentSystem.deductCharge(vehicle, charge);
+                    accountManager.deductCharge(vehicle, charge);
                 } catch (InsufficientCreditException ice) {
-                    paymentSystem.issuePenalty(vehicle, charge);
+                    accountManager.issuePenalty(vehicle, charge);
                 } catch (AccountNotRegisteredException e) {
-                    paymentSystem.issuePenalty(vehicle, charge);
+                    accountManager.issuePenalty(vehicle, charge);
                 }
 
             }
